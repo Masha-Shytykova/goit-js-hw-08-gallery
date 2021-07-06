@@ -64,6 +64,8 @@ const galleryItems = [
   },
 ];
 
+// Создание и рендер разметки по массиву данных galleryItems из app.js и предоставленному шаблону.
+
 const galleryListEl = document.querySelector('.js-gallery');
 
 const cardsMarkup = createCardsMarkup(galleryItems);
@@ -90,4 +92,29 @@ function createCardsMarkup(arr) {
     .join('');
 }
 
-console.log(cardsMarkup);
+// Реализация делегирования на галерее ul.js-gallery и получение url большого изображения.
+
+galleryListEl.addEventListener('click', onGalleryListClick);
+
+function onGalleryListClick(evt) {
+  if (evt.target.nodeName !== 'A') {
+    return;
+  }
+
+  //   //evt.preventDefault();
+
+  // console.log(evt.target);
+
+  // 1 variant
+  // return evt.target.href;
+
+  // 2 variant
+  // const link = evt.target;
+  // const linkHref = link.href;
+  // console.log(linkHref);
+  // return linkHref;
+}
+
+//const galleryLinkEl = document.querySelector('.gallery__link');
+//const clickedLinkHref = galleryLinkEl.href;
+//console.log(clickedLinkHref);
