@@ -135,6 +135,43 @@ body {
 }
 
 .lightbox__button:hover,
-.lightbox__button:focus {
+.lightbox__button:focus,
+.scroll__button:hover,
+.scroll__button:focus {
   background-color: rgba(0, 0, 0, 0.5);
+}
+
+.scroll__button {
+  position: absolute;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: transparent;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color var(--animation-duration) var(--timing-function);
+  outline: none;
+
+  background-position: center;
+  background-size: 60%;
+  background-repeat: no-repeat;
+}
+
+.scroll__button--right {
+  top: 50%;
+  right: 8px;
+  background-image: url('../images/arrow-right.svg');
+}
+
+.scroll__button--left {
+  top: 50%;
+  left: 8px;
+  background-image: url('../images/arrow-left.svg');
 }

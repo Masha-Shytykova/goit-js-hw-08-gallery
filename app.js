@@ -67,6 +67,24 @@ const galleryItems = [
 // Создание и рендер разметки по массиву данных galleryItems из app.js и предоставленному шаблону.
 
 const galleryListEl = document.querySelector('.js-gallery');
+const modalEl = document.querySelector('.lightbox');
+const imgLightboxEl = document.querySelector('.lightbox__image');
+const overlayEl = document.querySelector('.lightbox__overlay');
+const closeModalBtnEl = document.querySelector(
+  'button[data-action="close-lightbox"]',
+);
+const scrollRightBtnEl = document.querySelector(
+  'button[data-action="scroll-right"]',
+);
+const scrollLeftBtnEl = document.querySelector(
+  'button[data-action="scroll-left"]',
+);
+
+galleryListEl.addEventListener('click', onOpenModal);
+closeModalBtnEl.addEventListener('click', onCloseModal);
+overlayEl.addEventListener('click', onOverlayClick);
+scrollRightBtnEl.addEventListener('click', onScrollRightClick);
+scrollLeftBtnEl.addEventListener('click', onScrollLeftClick);
 
 const cardsMarkup = createCardsMarkup(galleryItems);
 
@@ -92,29 +110,50 @@ function createCardsMarkup(arr) {
     .join('');
 }
 
-// Реализация делегирования на галерее ul.js-gallery и получение url большого изображения.
-
-galleryListEl.addEventListener('click', onGalleryListClick);
-
-function onGalleryListClick(evt) {
-  if (evt.target.nodeName !== 'A') {
+function onOpenModal(evt) {
+  evt.preventDefault();
+  if (evt.target.nodeName !== 'IMG') {
     return;
   }
 
-  //   //evt.preventDefault();
-
-  // console.log(evt.target);
-
-  // 1 variant
-  // return evt.target.href;
-
-  // 2 variant
-  // const link = evt.target;
-  // const linkHref = link.href;
-  // console.log(linkHref);
-  // return linkHref;
+  modalEl.classList.add('is-open');
+  imgLightboxEl.setAttribute('src', `${evt.target.dataset.source}`);
+  window.addEventListener('keydown', onEscKeyPress);
 }
 
-//const galleryLinkEl = document.querySelector('.gallery__link');
-//const clickedLinkHref = galleryLinkEl.href;
-//console.log(clickedLinkHref);
+function onCloseModal(e) {
+  imgLightboxEl.setAttribute('src', '');
+  modalEl.classList.toggle('is-open');
+  window.removeEventListener('keydown', onEscKeyPress);
+}
+
+function onOverlayClick(e) {
+  // почему клик по модалке не всплывает на бекдропе и не нужно делать проверку:
+  // if (e.currentTarget === e.target){
+  onCloseModal();
+  // }
+}
+
+function onEscKeyPress(e) {
+  if (e.code === 'Escape') {
+    onCloseModal();
+  }
+}
+
+function onScrollRightClick(e) {
+  const urls = galleryItems.map(item => item.original);
+  const currentIndex = urls.indexOf(imgLightboxEl.getAttribute('src'));
+  const nextUrl = `${urls[currentIndex + 1]}`;
+  if (currentIndex + 1 >= 0 && currentIndex + 1 <= 8) {
+    imgLightboxEl.setAttribute('src', nextUrl);
+  }
+}
+
+function onScrollLeftClick(e) {
+  const urls = galleryItems.map(item => item.original);
+  const currentIndex = urls.indexOf(imgLightboxEl.getAttribute('src'));
+  const nextUrl = `${urls[currentIndex - 1]}`;
+  if (currentIndex - 1 >= 0 && currentIndex - 1 <= 8) {
+    imgLightboxEl.setAttribute('src', nextUrl);
+  }
+}
